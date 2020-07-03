@@ -439,6 +439,19 @@ app.delete("/api/delete", async (req, res) => {
   }
 });
 
+app.get("/api/school", async (req, res) => {
+  try {
+    const name = req.query.term;
+    const sql = "SELECT name FROM `Institution` WHERE name LIKE ?";
+    const result = await query(sql, [`${name}%`]);
+    res.json({ name: result.map((value) => value.name) });
+    res.status(200).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
+  }
+});
+
 app.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "profile-frontend/build/index.html"));
 });
